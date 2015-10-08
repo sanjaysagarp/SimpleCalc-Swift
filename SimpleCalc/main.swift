@@ -15,6 +15,10 @@ func input() -> String {
     return result.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
 }
 
+func convert(incoming:String) -> Float {
+    return NSNumberFormatter().numberFromString(incoming)!.floatValue
+}
+
 func factorial(num:Float) -> Float {
     if (num == 0) {
         return 1
@@ -22,6 +26,8 @@ func factorial(num:Float) -> Float {
         return num * factorial(num-1)
     }
 }
+
+// should implement option to quit?
 var active = true
 
 while active {
@@ -31,72 +37,54 @@ while active {
     print("Enter an expression separated by returns:")
 
     var digit1 = input()
-    var lineNum = digit1.componentsSeparatedByString(" ")
-    var operand = lineNum[lineNum.count-1]
-    var digit2 = ""
-    var simpleOperand = digit2
-    switch operand {
-        case "count":
-            result = Float(lineNum.count-1)
-        case "avg":
-            for index in 0...(lineNum.count-2) {
-                result += Float(lineNum[index])!
-            }
-            result = result / Float(lineNum.count-1)
-        case "fact":
-            if(Float(lineNum[0])! % 1 == 0){
-                result = factorial(Float(lineNum[0])!)
-            } else {
-                print("Invalid Integer")
-            }
-        case digit1:
-            simpleOperand = input()
-            break
-        default:
-            print("Unknown Command")
-            break
-    }
+    var operand = input()
 
 
 
     //case check starts here for operands (digit2 is only needed for add/sub...etc)
-    switch simpleOperand {
+    switch operand {
         //addition
         case "+":
-            var digit2 = Float(input())
-            result = Float(digit1)! + digit2!
+            var digit2 = convert(input())
+            result = convert(digit1) + digit2
         //subtraction
         case "-":
-            var digit2 = Float(input())
-            result = Float(digit1)! - digit2!
+            var digit2 = convert(input())
+            result = convert(digit1) - digit2
+        //multiplication
         case "*":
-            var digit2 = Float(input())
-            result = Float(digit1)! * digit2!
+            var digit2 = convert(input())
+            result = convert(digit1) * digit2
+        //mod
         case "%":
-            var digit2 = Float(input())
-            result = Float(digit1)! % digit2!
+            var digit2 = convert(input())
+            result = convert(digit1) % digit2
+        //division
         case "/":
-            var digit2 = Float(input())
-            result = Float(digit1)! / digit2!
+            var digit2 = convert(input())
+            result = convert(digit1) / digit2
+        // count numbers
         case "count":
             var lineNum = digit1.componentsSeparatedByString(" ")
             result = Float(lineNum.count)
+        // average
         case "avg":
             var lineNum = digit1.componentsSeparatedByString(" ")
             for index in 0...(lineNum.count-1) {
-                result += Float(lineNum[index])!
+                result += convert(lineNum[index])
             }
             result = result / Float(lineNum.count)
+        // factoral
         case "fact":
-            if(Float(digit1)! % 1 == 0){
-                result = factorial(Float(digit1)!)
+            var lineNum = digit1.componentsSeparatedByString(" ")
+            if(convert(lineNum[0]) % 1 == 0){
+                result = factorial(convert(lineNum[0]))
             } else {
                 print("Invalid Integer")
             }
         default:
             break
     }
-
     if (result % 1 == 0) {
         print("Result: \(Int(result))")
     } else {
